@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" http-equiv="X-UA-Compatible" content="width=device-width, initial-scale=1">
+    <title>Vue.js 搜索页面</title>
+    <script th:src="@{/js/vue/2.6.11/vue.js}"></script>
+    <script th:src="@{/js/axios/0.19.2/axios.min.js}"></script>
+    <link rel="stylesheet" th:href="@{/css/website.css}"/>
+</head>
+<body>
+<form id="main" v-cloak>
+    <div class="bar">
+        <!-- searchString 模型与文本域创建绑定 -->
+        <input type="text" v-model="searchString" placeholder="输入搜索内容" />
+    </div>
+    <ul>
+        <!-- 循环输出数据 -->
+        <li v-for="site in filteredSites">
+            <a v-bind:href="site.url"><img v-bind:src="site.imageUrl" /></a>
+            <p>{{site.name}}</p>
+        </li>
+    </ul>
+</form>
+<script type="text/javascript">
+    var demo = new Vue({
+        el: '#main',
+        data: {
+            searchString: "",
+            websites: [] //数据，基于Ajax来获取后台数据
+        },
+        computed: {
+            //关键字匹配搜索
+            filteredSites: function () {
+                var websites_array = this.websites,
+                    searchString = this.searchString;
+
+                if(!searchString){
+                    return websites_array;
+                }
+                searchString = searchString.trim().toLowerCase();
+
+                websites_array = websites_array.filter(function(item){
+                    if(item.name.toLowerCase().indexOf(searchString) !== -1){
+                        return item;
+                    }
+                })
+                // 返回结果数组
+                return websites_array;;
+            }
+        },
+        mounted: function() {
+            this.fetchData();
+        },
+        methods: {
+            fetchData: function() {
+                var that = this;
+                axios.get("/dynamic/sites")
+                    .then(function(response){
+                        that.websites = response.data;
+                    })
+                    .catch(function(error){
+                        console.log(error);
+                    })
+            }
+        }
+    });
+</script>
+</body>
+</html>

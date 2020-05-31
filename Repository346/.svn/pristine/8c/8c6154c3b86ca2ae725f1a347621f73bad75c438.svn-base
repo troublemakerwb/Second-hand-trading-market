@@ -1,0 +1,10 @@
+#include <stdio.h>
+ 
+int main()
+{
+    /* 我的第一个 C 程序 */
+    printf("Hello, World! \n");
+ 
+    return 0;
+}
+在目录B346中修改2.txt!!!!在目录A346中修改2.txt!!!!

@@ -1,0 +1,1 @@
+新建版本库：打开VisualSVN，对Repositories鼠标右键选择新建在选择
